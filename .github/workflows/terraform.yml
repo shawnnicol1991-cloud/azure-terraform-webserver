@@ -1,0 +1,36 @@
+name: 'Terraform CI/CD Pipeline'
+
+# 1. When should this run? (Every time you push code to the 'main' branch)
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    name: 'Deploy Infrastructure'
+    runs-on: ubuntu-latest # GitHub will spin up a temporary Linux server to run this
+
+    # 2. Give the server your Azure Robot User credentials
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+    # 3. The exact steps the server will take
+    steps:
+    - name: Download Code from GitHub
+      uses: actions/checkout@v3
+
+    - name: Install Terraform on the temporary server
+      uses: hashicorp/setup-terraform@v2
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Plan
+      run: terraform plan
+
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
