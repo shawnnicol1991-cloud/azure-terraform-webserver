@@ -15,7 +15,10 @@ terraform {
     key                  = "terraform.tfstate"
   }
 }
-
+variable "ssh_public_key" {
+  description = "The SSH Public Key for the Web Server"
+  type        = string
+}
 provider "azurerm" {
   features {
     resource_group {
@@ -103,10 +106,10 @@ resource "azurerm_linux_virtual_machine" "vm" {
     azurerm_network_interface.nic.id,
   ]
 
-  admin_ssh_key {
-    username   = "adminuser"
-    public_key = file("~/.ssh/id_rsa.pub")
-  }
+admin_ssh_key {
+  username   = "adminuser"
+  public_key = var.ssh_public_key
+}
 
   os_disk {
     caching              = "ReadWrite"
