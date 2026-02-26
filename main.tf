@@ -89,7 +89,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   name                = "vm-webserver"
   resource_group_name = azurerm_resource_group.devops_rg.name
   location            = azurerm_resource_group.devops_rg.location
-  size                = "Standard_D2s_v3" # Cheap tier for testing
+  size                = "Standard_D2s_v3"
   admin_username      = "adminuser"
   network_interface_ids = [
     azurerm_network_interface.nic.id,
@@ -97,7 +97,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
 
   admin_ssh_key {
     username   = "adminuser"
-    public_key = file("~/.ssh/id_rsa.pub") # Ensure you have an SSH key generated on your PC
+    public_key = file("~/.ssh/id_rsa.pub")
   }
 
   os_disk {
@@ -112,8 +112,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
     version   = "latest"
   }
 
-  # THIS IS THE MAGIC: Automated Configuration (Bash Script)
-  # This installs Nginx automatically when the server turns on.
   custom_data = base64encode(<<-EOF
               #!/bin/bash
               apt-get update

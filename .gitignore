@@ -4,6 +4,6 @@
 *.tfstate.*
 .terraform.lock.hcl
 
-# Ignore your private and public SSH Keys!
+# Ignore your private and public SSH Keys
 SSH KEYS1
 SSH KEYS1.pub
